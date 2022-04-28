@@ -35,6 +35,7 @@ namespace EVP.WebToPay.ClientAPI
         private string _personCode;
         private Dictionary<string, string> _additionalParameters = new Dictionary<string, string>();
         private bool? _repeatRequest;
+        private bool? _buyerConsent;
 
 
         internal MacroRequest(int projectId, string version)
@@ -81,6 +82,10 @@ namespace EVP.WebToPay.ClientAPI
             dataQueryParams["repeat_request"] = HttpQueryUtility.ToQueryParameter(this._repeatRequest);
             dataQueryParams["only_payments"] = HttpQueryUtility.ToQueryParameter(this._allowPayments);
             dataQueryParams["disalow_payments"] = HttpQueryUtility.ToQueryParameter(this._disallowPayments);
+            if (this._buyerConsent.HasValue)
+            {
+                dataQueryParams["buyer_consent"] = this._buyerConsent.Value ? "1" : "0";
+            }
 
             foreach (KeyValuePair<string, string> param in this._additionalParameters)
             {
@@ -129,6 +134,12 @@ namespace EVP.WebToPay.ClientAPI
         {
             get { return this._test; }
             set { this._test = value; }
+        }
+
+        public bool? BuyerConsent
+        {
+            get { return this._buyerConsent; }
+            set { this._buyerConsent = value; }
         }
 
         //TODO: Change to DateTime
